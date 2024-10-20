@@ -1,28 +1,32 @@
 package com.example.connectapi
 
-import android.annotation.SuppressLint
+import ViewModelFactory
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.connectapi.adapter.ProductAdapter
 import com.example.connectapi.data.api.ApiClient
 import com.example.connectapi.data.model.Product
-import com.example.connectapi.data.model.Products
+import com.example.connectapi.data.viewModel.ProductViewModel
 import com.example.connectapi.databinding.ActivityMainBinding
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var recyclerView: RecyclerView
-    private lateinit var call: Call<Products>
     private lateinit var productAdapter: ProductAdapter
     private lateinit var binding: ActivityMainBinding
+
+    private val productViewModel: ProductViewModel by viewModels {
+        ViewModelFactory(ApiClient.productService)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,31 +41,23 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = productAdapter
         recyclerView.layoutManager = GridLayoutManager(applicationContext, 2)
         swipeRefreshLayout.setOnRefreshListener {
-            getData()
+            refreshData()
         }
-        getData()
+        observeProduct()
     }
 
-    private fun getData() {
+    private fun observeProduct() {
+        lifecycleScope.launch {
+            productViewModel.product.collectLatest { paging ->
+                swipeRefreshLayout.isRefreshing = false
+                productAdapter.submitData(paging)
+            }
+        }
+    }
+
+    private fun refreshData() {
         swipeRefreshLayout.isRefreshing = true
-
-        call = ApiClient.productService.getAll()
-        call.enqueue(object : Callback<Products>{
-            @SuppressLint("NotifyDataSetChanged")
-            override fun onResponse(call: Call<Products>, response: Response<Products>) {
-                swipeRefreshLayout.isRefreshing = false
-                if (response.isSuccessful) {
-                    productAdapter.submitList(response.body()?.products)
-                    productAdapter.notifyDataSetChanged()
-                }
-            }
-
-            override fun onFailure(call: Call<Products>, t: Throwable) {
-                swipeRefreshLayout.isRefreshing = false
-                Toast.makeText(applicationContext, t.localizedMessage, Toast.LENGTH_SHORT).show()
-            }
-
-        })
+        productAdapter.refresh()
     }
 
     private fun OnClick(product: Product) {
@@ -70,3 +66,4 @@ class MainActivity : AppCompatActivity() {
         startActivity(goToDetail)
     }
 }
+

@@ -6,15 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.connectapi.data.model.Product
-import androidx.recyclerview.widget.ListAdapter
 import com.bumptech.glide.Glide
 import com.example.connectapi.R
+import com.example.connectapi.data.model.Product
 
 class ProductAdapter(private val onClick: (Product) -> Unit) :
-    ListAdapter<Product, ProductAdapter.ProductViewHolder>(ProductCallBack) {
+    PagingDataAdapter<Product, ProductAdapter.ProductViewHolder>(ProductCallBack) {
 
     class ProductViewHolder(itemView: View, val onClick: (Product) -> Unit ) :
         RecyclerView.ViewHolder(itemView){
@@ -54,7 +54,9 @@ class ProductAdapter(private val onClick: (Product) -> Unit) :
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = getItem(position)
-        holder.bind(product)
+        if (product != null) {
+            holder.bind(product)
+        }
     }
 }
 

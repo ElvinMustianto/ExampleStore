@@ -1,5 +1,4 @@
 package com.example.connectapi.data.model
-
-data class Products (
+data class  Products (
     val products : List<Product>
 )
