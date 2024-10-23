@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
+@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var recyclerView: RecyclerView
@@ -28,6 +30,8 @@ class MainActivity : AppCompatActivity() {
         ViewModelFactory(ApiClient.productService)
     }
 
+    private var isSearchActive = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -37,12 +41,38 @@ class MainActivity : AppCompatActivity() {
         swipeRefreshLayout = binding.main
         recyclerView = binding.recyclerView
 
-        productAdapter = ProductAdapter { product -> OnClick(product) }
+        productAdapter = ProductAdapter { product -> onClick(product) }
         recyclerView.adapter = productAdapter
         recyclerView.layoutManager = GridLayoutManager(applicationContext, 2)
         swipeRefreshLayout.setOnRefreshListener {
             refreshData()
         }
+        binding.searchView.setOnClickListener {
+            binding.searchView.isIconified = false // Membuat area pencarian terbuka ketika diklik
+        }
+
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (!query.isNullOrEmpty()){
+                    isSearchActive = true
+                    search(query)
+                } else {
+                    observeProduct()
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                if (query.isNullOrEmpty()) {
+                    observeProduct()
+                } else {
+                    isSearchActive = true
+                    search(query)
+                }
+                return false
+            }
+
+        })
         observeProduct()
     }
 
@@ -60,10 +90,34 @@ class MainActivity : AppCompatActivity() {
         productAdapter.refresh()
     }
 
-    private fun OnClick(product: Product) {
+    private fun onClick(product: Product) {
         val goToDetail = Intent(this, DetailProduct::class.java)
         goToDetail.putExtra("PRODUCT_ID", product.id)
         startActivity(goToDetail)
+    }
+
+    private fun search(query: String) {
+        productViewModel.updateQuery(query)
+        lifecycleScope.launch {
+            productViewModel.searchProduct(query).collectLatest { paging ->
+                swipeRefreshLayout.isRefreshing = false
+                productAdapter.submitData(paging)
+            }
+        }
+    }
+
+    override fun onBackPressed() {
+        if (isSearchActive) {
+            // Jika pencarian aktif, reset pencarian tanpa refresh
+            isSearchActive = false
+            binding.searchView.setQuery("", false) // Reset search query
+            binding.searchView.clearFocus() // Hapus fokus dari SearchView
+            binding.searchView.isIconified = true
+            recyclerView.scrollToPosition(0) // Scroll ke posisi atas
+        } else {
+            // Jika pencarian tidak aktif, lanjutkan dengan default back button behavior
+            super.onBackPressed()
+        }
     }
 }
 

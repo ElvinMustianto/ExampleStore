@@ -12,6 +12,7 @@ import java.io.IOException
 
 class ProductPagingSource(
     private val productService: ProductService,
+    private val query: String? = null,
     private val limit: Int = 10,
 ) : PagingSource<Int, Product>() {
     override fun getRefreshKey(state: PagingState<Int, Product>): Int? {
@@ -25,13 +26,14 @@ class ProductPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Product> {
         val page = params.key ?: 0
         return try {
-            val response = productService.getProducts(limit, skip = page * limit)
-            val products = response.body()?.products ?: emptyList()
-            val nextKey = if (products.isEmpty()) {
-                null
+            val response = if (query.isNullOrEmpty()) {
+                productService.getProducts(limit, skip = page * limit)
             } else {
-                page + 1
+                productService.searchProducts(query, limit, skip = page * limit)
             }
+            val products = response.body()?.products ?: emptyList()
+            val nextKey = if (products.isEmpty()) null else page + 1
+
             Page(
                 data = products,
                 prevKey = if (page == 0) null else page - 1,

@@ -16,8 +16,8 @@ import com.example.connectapi.data.model.Product
 class ProductAdapter(private val onClick: (Product) -> Unit) :
     PagingDataAdapter<Product, ProductAdapter.ProductViewHolder>(ProductCallBack) {
 
-    class ProductViewHolder(itemView: View, val onClick: (Product) -> Unit ) :
-        RecyclerView.ViewHolder(itemView){
+    class ProductViewHolder(itemView: View, val onClick: (Product) -> Unit) :
+        RecyclerView.ViewHolder(itemView) {
         private val thumbnail: ImageView = itemView.findViewById(R.id.thumbnail)
         private val title: TextView = itemView.findViewById(R.id.title)
         private val brand: TextView = itemView.findViewById(R.id.brand)
@@ -26,12 +26,13 @@ class ProductAdapter(private val onClick: (Product) -> Unit) :
         private var currentProduct: Product? = null
 
         init {
-            itemView.setOnClickListener{
-                currentProduct?.let{
-                    onClick(it)
+            itemView.setOnClickListener {
+                currentProduct?.let { product ->
+                    onClick(product)
                 }
             }
         }
+
         @SuppressLint("SetTextI18n")
         fun bind(product: Product) {
             currentProduct = product
@@ -48,7 +49,7 @@ class ProductAdapter(private val onClick: (Product) -> Unit) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-       val view = LayoutInflater.from(parent.context).inflate(R.layout.row_product, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.row_product, parent, false)
         return ProductViewHolder(view, onClick)
     }
 
@@ -58,15 +59,14 @@ class ProductAdapter(private val onClick: (Product) -> Unit) :
             holder.bind(product)
         }
     }
-}
 
-object ProductCallBack: DiffUtil.ItemCallback<Product>() {
-    override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
-        return oldItem == newItem
+
+    object ProductCallBack : DiffUtil.ItemCallback<Product>() {
+        override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
+            return oldItem == newItem
+        }
+        override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
+            return oldItem.id == newItem.id
+        }
     }
-
-    override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
-        return oldItem.id == newItem.id
-    }
-
 }
