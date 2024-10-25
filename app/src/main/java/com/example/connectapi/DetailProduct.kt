@@ -64,14 +64,15 @@ class DetailProduct : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun updateUI(product: Product) {
-        binding.detailTitle.text = product.title
-        binding.detailBrand.text = product.brand
-        binding.detailDescription.text = product.description
-        binding.detailPrice.text = "$ ${product.price}"
+        binding.title.text = product.title
+        binding.brand.text = product.brand
+        binding.description.text = product.description
+        binding.price.text = "$ ${product.price}"
+        binding.rating.text = product.rating.toString()
 
         Glide.with(this)
             .load(product.thumbnail)
             .centerCrop()
-            .into(binding.detailThumbnail)
+            .into(binding.thumbnail)
     }
 }

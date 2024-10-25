@@ -1,9 +1,5 @@
 package com.example.connectapi.data.model
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 
-
-@Parcelize
 data class Product (
     val id : Int,
     val title : String,
@@ -12,5 +8,10 @@ data class Product (
     val category : String,
     val price : Double,
     val stock : Int,
-    val thumbnail : String
-) : Parcelable
+    val thumbnail : String,
+    val rating : Double,
+    val sku : String,
+    val dimension : List<Dimension>,
+    val reviews : List<Reviews>,
+    val images : List<String>
+)

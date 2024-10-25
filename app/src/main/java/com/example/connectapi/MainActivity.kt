@@ -1,6 +1,6 @@
 package com.example.connectapi
 
-import ViewModelFactory
+import com.example.connectapi.data.factory.ViewModelFactory
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -65,9 +65,6 @@ class MainActivity : AppCompatActivity() {
             override fun onQueryTextChange(query: String?): Boolean {
                 if (query.isNullOrEmpty()) {
                     observeProduct()
-                } else {
-                    isSearchActive = true
-                    search(query)
                 }
                 return false
             }
@@ -106,6 +103,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @Deprecated("This method has been deprecated in favor of using the\n      {@link OnBackPressedDispatcher} via {@link #getOnBackPressedDispatcher()}.\n      The OnBackPressedDispatcher controls how back button events are dispatched\n      to one or more {@link OnBackPressedCallback} objects.")
     override fun onBackPressed() {
         if (isSearchActive) {
             // Jika pencarian aktif, reset pencarian tanpa refresh

@@ -20,8 +20,8 @@ class ProductViewModel(private val productService: ProductService) : ViewModel()
         ProductPagingSource(productService, query = query)
     }.flow.cachedIn(viewModelScope)
 
-    fun updateQuery(Query: String) {
-        queryLiveData.value = Query
+    fun updateQuery(query: String) {
+        queryLiveData.value = query
     }
 
 }
