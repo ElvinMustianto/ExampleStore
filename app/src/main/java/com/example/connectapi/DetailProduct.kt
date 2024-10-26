@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.example.connectapi.adapter.ProductImageAdapter
 import com.example.connectapi.data.api.ApiClient
 import com.example.connectapi.data.model.Product
 import com.example.connectapi.databinding.ActivityDetailProductBinding
@@ -70,9 +72,12 @@ class DetailProduct : AppCompatActivity() {
         binding.price.text = "$ ${product.price}"
         binding.rating.text = product.rating.toString()
 
-        Glide.with(this)
-            .load(product.thumbnail)
-            .centerCrop()
-            .into(binding.thumbnail)
+        // Pastikan daftar gambar tidak kosong dan berisi URL yang valid
+        if (product.images.isNotEmpty() && product.images[0] != "...") {
+            val adapter = ProductImageAdapter(product.images)
+            binding.viewPager.adapter = adapter
+        } else {
+            Toast.makeText(this, "No images available", Toast.LENGTH_SHORT).show()
+        }
     }
 }

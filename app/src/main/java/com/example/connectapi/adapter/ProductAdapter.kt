@@ -22,6 +22,7 @@ class ProductAdapter(private val onClick: (Product) -> Unit) :
         private val title: TextView = itemView.findViewById(R.id.title)
         private val brand: TextView = itemView.findViewById(R.id.brand)
         private val price: TextView = itemView.findViewById(R.id.price)
+        private val rating: TextView = itemView.findViewById(R.id.rating)
 
         private var currentProduct: Product? = null
 
@@ -40,6 +41,7 @@ class ProductAdapter(private val onClick: (Product) -> Unit) :
             title.text = product.title
             brand.text = product.brand
             price.text = "$ ${product.price}"
+            rating.text = product.rating.toString()
 
             Glide.with(itemView)
                 .load(product.thumbnail)
