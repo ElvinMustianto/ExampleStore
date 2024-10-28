@@ -1,4 +1,4 @@
-package com.example.connectapi.data.paging
+package com.example.connectapi.dto.paging
 
 import android.net.http.HttpException
 import android.os.Build
@@ -6,8 +6,8 @@ import androidx.annotation.RequiresExtension
 import androidx.paging.PagingSource
 import androidx.paging.PagingSource.LoadResult.Page
 import androidx.paging.PagingState
-import com.example.connectapi.data.model.Product
-import com.example.connectapi.data.service.ProductService
+import com.example.connectapi.dto.model.Product
+import com.example.connectapi.dto.service.ProductService
 import java.io.IOException
 
 class ProductPagingSource(

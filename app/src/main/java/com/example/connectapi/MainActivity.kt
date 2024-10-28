@@ -1,6 +1,6 @@
 package com.example.connectapi
 
-import com.example.connectapi.data.factory.ViewModelFactory
+import com.example.connectapi.dto.factory.ViewModelFactory
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.connectapi.adapter.ProductAdapter
-import com.example.connectapi.data.api.ApiClient
-import com.example.connectapi.data.model.Product
-import com.example.connectapi.data.viewModel.ProductViewModel
+import com.example.connectapi.dto.api.ApiClient
+import com.example.connectapi.dto.model.Product
+import com.example.connectapi.dto.viewModel.ProductViewModel
 import com.example.connectapi.databinding.ActivityMainBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

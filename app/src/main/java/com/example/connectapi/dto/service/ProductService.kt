@@ -1,7 +1,7 @@
-package com.example.connectapi.data.service
+package com.example.connectapi.dto.service
 
-import com.example.connectapi.data.model.Product
-import com.example.connectapi.data.model.Products
+import com.example.connectapi.dto.model.Product
+import com.example.connectapi.dto.model.Products
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

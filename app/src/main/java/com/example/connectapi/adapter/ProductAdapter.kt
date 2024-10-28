@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.connectapi.R
-import com.example.connectapi.data.model.Product
+import com.example.connectapi.dto.model.Product
 
 class ProductAdapter(private val onClick: (Product) -> Unit) :
     PagingDataAdapter<Product, ProductAdapter.ProductViewHolder>(ProductCallBack) {

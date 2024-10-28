@@ -1,9 +1,9 @@
-package com.example.connectapi.data.factory
+package com.example.connectapi.dto.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.connectapi.data.service.ProductService
-import com.example.connectapi.data.viewModel.ProductViewModel
+import com.example.connectapi.dto.service.ProductService
+import com.example.connectapi.dto.viewModel.ProductViewModel
 
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory(private val productService: ProductService) : ViewModelProvider.NewInstanceFactory() {

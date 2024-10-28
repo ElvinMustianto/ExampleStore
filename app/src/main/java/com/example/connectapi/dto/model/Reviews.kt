@@ -1,4 +1,4 @@
-package com.example.connectapi.data.model
+package com.example.connectapi.dto.model
 
 data class Reviews (
     val rating : Int,

@@ -1,27 +1,32 @@
 package com.example.connectapi
 
+import ReviewAdapter
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.connectapi.adapter.ProductImageAdapter
-import com.example.connectapi.data.api.ApiClient
-import com.example.connectapi.data.model.Product
+import com.example.connectapi.dto.api.ApiClient
+import com.example.connectapi.dto.model.Product
 import com.example.connectapi.databinding.ActivityDetailProductBinding
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class DetailProduct : AppCompatActivity() {
     private lateinit var binding: ActivityDetailProductBinding
-
+    private lateinit var reviewAdapter: ReviewAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailProductBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        // Menampilkan list review
+        binding.recyclerComment.layoutManager = LinearLayoutManager(this)
+        reviewAdapter = ReviewAdapter(emptyList())
+        binding.recyclerComment.adapter = reviewAdapter
 
         // Mengambil ID produk dari intent
         val productId = intent.getIntExtra("PRODUCT_ID", -1)
@@ -78,6 +83,13 @@ class DetailProduct : AppCompatActivity() {
             binding.viewPager.adapter = adapter
         } else {
             Toast.makeText(this, "No images available", Toast.LENGTH_SHORT).show()
+        }
+
+        if (product.reviews.isNotEmpty()) {
+            reviewAdapter = ReviewAdapter(product.reviews)
+            binding.recyclerComment.adapter = reviewAdapter
+        } else {
+            Toast.makeText(this, "No reviews available", Toast.LENGTH_SHORT).show()
         }
     }
 }

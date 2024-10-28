@@ -1,6 +1,6 @@
-package com.example.connectapi.data.api
+package com.example.connectapi.dto.api
 
-import com.example.connectapi.data.service.ProductService
+import com.example.connectapi.dto.service.ProductService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
