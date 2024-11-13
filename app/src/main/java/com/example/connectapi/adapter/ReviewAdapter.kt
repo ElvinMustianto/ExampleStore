@@ -1,6 +1,8 @@
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView.*
 import com.example.connectapi.R
@@ -9,16 +11,22 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
 
-class ReviewAdapter(private val reviews: List<Reviews>): Adapter<ReviewAdapter.ReviewsViewHolder>() {
+class ReviewAdapter(private var reviews: List<Reviews>): Adapter<ReviewAdapter.ReviewsViewHolder>() {
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateReviews(newReviews: List<Reviews>) {
+        reviews = newReviews
+        notifyDataSetChanged()
+    }
     class ReviewsViewHolder(view: View): ViewHolder(view) {
         private val reviewerName: TextView = view.findViewById(R.id.reviewerName)
-        private val rating : TextView = view.findViewById(R.id.rating)
+        private val ratingBar : RatingBar = view.findViewById(R.id.ratingBar)
         private val comment : TextView = view.findViewById(R.id.comment)
         private val date : TextView = view.findViewById(R.id.date)
 
         fun bind(reviews: Reviews) {
             reviewerName.text = reviews.reviewerName
-            rating.text = reviews.rating.toString()
+            ratingBar.rating = reviews.rating.toFloat()
             comment.text = reviews.comment
 
             // Parse and format the date
