@@ -88,6 +88,13 @@ class DetailProduct : AppCompatActivity() {
         } else {
             Toast.makeText(this, "No images available", Toast.LENGTH_SHORT).show()
         }
+
+        // Menampilkan dimensi produk dengan null safety
+        product.dimensions.let { dimension ->
+            binding.widthProduct.text = "Width : ${dimension.width} cm"
+            binding.heightProduct.text = "Height : ${dimension.height} cm"
+            binding.depthProduct.text = "Depth : ${dimension.depth} cm"
+        }
     }
     private fun parseAndFormatDate(dateString: String): String? {
         return try {
