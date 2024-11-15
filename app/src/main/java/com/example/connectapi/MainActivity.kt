@@ -51,6 +51,11 @@ class MainActivity : AppCompatActivity() {
             binding.searchView.isIconified = false // Membuat area pencarian terbuka ketika diklik
         }
 
+        binding.categories.setOnClickListener {
+            val categories = Intent(this, CategoryActivity::class.java)
+            startActivity(categories)
+        }
+
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (!query.isNullOrEmpty()){

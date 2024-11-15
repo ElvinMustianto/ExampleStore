@@ -1,5 +1,6 @@
 package com.example.connectapi.dto.service
 
+import com.example.connectapi.dto.model.Category
 import com.example.connectapi.dto.model.Product
 import com.example.connectapi.dto.model.Products
 import com.example.connectapi.dto.model.Reviews
@@ -24,5 +25,8 @@ interface ProductService {
 
     @GET("products/{id}")
     suspend fun getProductById(@Path("id") id: Int): Response<Product>
+
+    @GET("products/categories")
+    suspend fun  getCategories(): Response<List<Category>>
 
 }
